@@ -1,0 +1,58 @@
+{
+    "name": "minhyung/fss",
+    "description": "API Wrappers of Financial Supervisory Service in Korea",
+    "type": "library",
+    "keywords": [
+        "laravel"
+    ],
+    "homepage": "https://github.com/overworks/laravel-fss",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Minhyung Park",
+            "email": "minhyung.park@sejongtf.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/overworks/laravel-fss/issues",
+        "source": "https://github.com/overworks/laravel-fss"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.5",
+        "illuminate/support": "^10.0|^11.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Minhyung\\Fss\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Minhyung\\Fss\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.x-dev",
+            "dev-master": "0.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Minhyung\\Fss\\ServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
