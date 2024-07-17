@@ -70,6 +70,8 @@ class Lifespan
      * 
      * @param  \Minhyung\Fss\Lifespan\PsAreaCode          $areaCode
      * @param  \Minhyung\Fss\Lifespan\PsChannelCode|null  $channelCode
+     * @throws \Minhyung\Fss\Lifespan\ApiException
+     * @return array
      */
     public function psGuaranteedProdList(PsAreaCode $areaCode, ?PsChannelCode $channelCode = null): array
     {
@@ -79,6 +81,64 @@ class Lifespan
             $params['channelCode'] = (int)$channelCode;
         }
         return $this->request('psGuaranteedProdList.json', $params);
+    }
+
+    /**
+     * 퇴직연금 비교공시 – 수익률 (단위: 조원)
+     * 
+     * @link  https://www.fss.or.kr/fss/lifeplan/devlopGuide/list3Info1.do?menuNo=201055
+     * 
+     * @throws \Minhyung\Fss\Lifespan\ApiException
+     * @return array
+     */
+    public function pensionStat()
+    {
+        return $this->request('pensionStat.json');
+    }
+
+    /**
+     * 연금 통계 - 공적연금 통계 (단위: 조원)
+     * 
+     * @link  https://www.fss.or.kr/fss/lifeplan/devlopGuide/list3Info2.do?menuNo=201055
+     * 
+     * @throws \Minhyung\Fss\Lifespan\ApiException
+     * @return array
+     */
+    public function publicPensionStat()
+    {
+        return $this->request('publicPensionStat.json');
+    }
+
+    /**
+     * 연금 통계 - 개인연금 통계 (단위: 조원)
+     * 
+     * @link  https://www.fss.or.kr/fss/lifeplan/devlopGuide/list3Info3.do?menuNo=201055
+     * 
+     * @param  int  $stateType  통계 종류 (1: 개인연금 적립금, 2: 연금저축 적립금, 3: 연금저축 계약건수)
+     * @throws \Minhyung\Fss\Lifespan\ApiException
+     * @return array
+     */
+    public function personalPensionStat(int $statType): array
+    {
+        $params = [];
+        $params['statType'] = $statType;
+        return $this->request('personalPensionStat.json', $params);
+    }
+
+    /**
+     * 연금 통계 - 퇴직연금 통계 (단위: 조원)
+     * 
+     * @link  https://www.fss.or.kr/fss/lifeplan/devlopGuide/list3Info4.do?menuNo=201055
+     * 
+     * @param  int  $stateType  통계 종류 (1: 퇴직연금 적립금, 3: 퇴직연금 계약건수)
+     * @throws \Minhyung\Fss\Lifespan\ApiException
+     * @return array
+     */
+    public function retirementPensionStat(int $statType): array
+    {
+        $params = [];
+        $params['statType'] = $statType;
+        return $this->request('retirementPensionStat.json', $params);
     }
 
     /**
