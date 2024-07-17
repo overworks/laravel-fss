@@ -23,6 +23,14 @@ class Lifespan
     }
 
     /**
+     * @return bool
+     */
+    public function isApiKeyEmpty(): bool
+    {
+        return empty($this->apiKey);
+    }
+
+    /**
      * 연금저축 비교공시 – 회사별 수익률·수수료율
      * 
      * @link   https://www.fss.or.kr/fss/lifeplan/devlopGuide/listInfo1.do?menuNo=201053
@@ -39,7 +47,7 @@ class Lifespan
         $params['year'] = $year;
         $params['quarter'] = $quarter;
         if ($areaCode) {
-            $params['areaCode'] = (int)$areaCode;
+            $params['areaCode'] = $areaCode->value;
         }
         return $this->request('psCorpList.json', $params);
     }
@@ -61,7 +69,7 @@ class Lifespan
         $params['year'] = $year;
         $params['quarter'] = $quarter;
         if ($areaCode) {
-            $params['areaCode'] = (int)$areaCode;
+            $params['areaCode'] = $areaCode->value;
         }
         return $this->request('psProdList.json', $params);
     }
@@ -79,9 +87,9 @@ class Lifespan
     public function psGuaranteedProdList(AreaCode $areaCode, ?PsChannelCode $channelCode = null): array
     {
         $params = [];
-        $params['areaCode'] = (int)$areaCode;
+        $params['areaCode'] = $areaCode->value;
         if ($channelCode) {
-            $params['channelCode'] = (int)$channelCode;
+            $params['channelCode'] = $channelCode->value;
         }
         return $this->request('psGuaranteedProdList.json', $params);
     }
@@ -161,7 +169,7 @@ class Lifespan
     {
         $params = [];
         if ($areaCode) {
-            $params['areaCode'] = (int)$areaCode;
+            $params['areaCode'] = $areaCode->value;
         }
         return $this->request('rpGuaranteedProdSupplyList.json', $params);
     }
@@ -182,7 +190,7 @@ class Lifespan
     public function rpGuaranteedProdList(AreaCode $areaCode, int $sysType, int $reportYear, int $reportMonth, ?int $productType = null): array
     {
         $params = [];
-        $params['areaCode'] = (int)$areaCode;
+        $params['areaCode'] = $areaCode->value;
         $params['sysType'] = $sysType;
         $params['reportDate'] = (new DateTime())->setDate($reportYear, $reportMonth, 1)->format('Y/m');
         if ($productType) {
@@ -265,7 +273,10 @@ class Lifespan
         $responseBody = $response->getBody()->getContents();
         $responseData = json_decode($responseBody, true);
 
-        if ($responseData['code'] != ResponseCode::SUCCEEDED) {
+        $responseCode = $responseData['code'];
+        if ($responseCode === ResponseCode::EMPTY->value) {
+            return [];
+        } else if ($responseData['code'] !== ResponseCode::SUCCEEDED->value) {
             throw new ApiException($responseData['code'], $responseData['message']);
         }
         return $responseData['list'];

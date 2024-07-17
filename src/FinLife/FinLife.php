@@ -22,6 +22,14 @@ class FinLife
     }
 
     /**
+     * @return bool
+     */
+    public function isApiKeyEmpty(): bool
+    {
+        return empty($this->apiKey);
+    }
+
+    /**
      * @param  Api          $api
      * @param  TopFinGrpNo  $topFinGrpNo
      * @param  int          $pageNo
@@ -31,10 +39,10 @@ class FinLife
      */
     public function request(Api $api, TopFinGrpNo $topFinGrpNo, int $pageNo = 1, ?string $financeCd = null): array
     {
-        $uri = ((string)$api).'Search.json';
+        $uri = $api->value.'Search.json';
         $params = [
             'auth' => $this->apiKey,
-            'topFinGrpNo' => (string)$topFinGrpNo,
+            'topFinGrpNo' => $topFinGrpNo->value,
             'pageNo' => $pageNo,
         ];
         if ($financeCd) {
