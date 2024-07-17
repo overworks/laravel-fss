@@ -4,6 +4,7 @@ namespace Minhyung\Fss;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Minhyung\Fss\FinLife\FinLife;
 use Minhyung\Fss\Lifespan\Lifespan;
 
 class ServiceProvider extends BaseServiceProvider
@@ -19,6 +20,9 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->app->bind(Lifespan::class, fn (Application $app) => new Lifespan($app->make('config')->get('fss.lifespan')));
         $this->app->alias(Lifespan::class, 'fss.lifespan');
+
+        $this->app->bind(FinLife::class, fn (Application $app) => new FinLife($app->make('config')->get('fss.finlife')));
+        $this->app->alias(FinLife::class, 'fss.finlife');
     }
 
     /**
