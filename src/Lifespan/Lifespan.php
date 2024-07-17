@@ -4,15 +4,17 @@ namespace Minhyung\Fss\Lifespan;
 
 use DateTime;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 class Lifespan
 {
     const BASE_URI = 'https://www.fss.or.kr/openapi/api/';
 
-    protected $apiKey = '';
-    protected $client = null;
+    protected string $apiKey = '';
+    protected ?Client $client = null;
 
     /**
+     * @param  array  $config
      * @return void
      */
     public function __construct($config)
@@ -197,7 +199,7 @@ class Lifespan
      * @throws \Minhyung\Fss\Lifespan\ApiException
      * @return array
      */
-    public function pensionStat()
+    public function pensionStat(): array
     {
         return $this->request('pensionStat.json');
     }
@@ -210,7 +212,7 @@ class Lifespan
      * @throws \Minhyung\Fss\Lifespan\ApiException
      * @return array
      */
-    public function publicPensionStat()
+    public function publicPensionStat(): array
     {
         return $this->request('publicPensionStat.json');
     }
@@ -256,7 +258,7 @@ class Lifespan
     public function request(string $uri, array $params = []): array
     {
         $requestOptions = [
-            'query' => $params + ['key' => $this->apiKey],
+            RequestOptions::QUERY => $params + ['key' => $this->apiKey],
         ];
 
         $response = $this->httpClient()->get($uri, $requestOptions);
@@ -272,11 +274,14 @@ class Lifespan
     /**
      * @return \GuzzleHttp\Client
      */
-    protected function httpClient()
+    protected function httpClient(): Client
     {
         if (is_null($this->client)) {
             $this->client = new Client([
                 'base_uri' => static::BASE_URI,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
             ]);
         }
         return $this->client;

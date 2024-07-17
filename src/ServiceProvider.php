@@ -17,7 +17,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/fss.php', 'fss');
 
-        $this->app->bind(Lifespan::class, fn (Application $app) => new Lifespan($app->make('config')->get('fss')));
+        $this->app->bind(Lifespan::class, fn (Application $app) => new Lifespan($app->make('config')->get('fss.lifespan')));
         $this->app->alias(Lifespan::class, 'fss.lifespan');
     }
 
