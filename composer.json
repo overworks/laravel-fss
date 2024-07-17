@@ -22,6 +22,7 @@
         "illuminate/support": "^10.0|^11.0"
     },
     "require-dev": {
+        "nunomaduro/collision": "^8.0",
         "orchestra/testbench": "^8.0|^9.0"
     },
     "autoload": {
@@ -34,7 +35,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Minhyung\\Fss\\Tests\\": "tests/"
+            "Minhyung\\Fss\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
         }
     },
     "extra": {
@@ -54,5 +56,22 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "lint": [
+            "@php vendor/bin/phpstan analyse"
+        ]
+    }
 }
