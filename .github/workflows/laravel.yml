@@ -1,0 +1,36 @@
+name: Laravel
+
+on:
+  push:
+    branches: [ "0.x" ]
+  pull_request:
+    branches: [ "0.x" ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [8.2, 8.3]
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+        coverage: none
+
+    - name: Install Dependencies
+      run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
+      run: vendor/bin/testbench package:test
