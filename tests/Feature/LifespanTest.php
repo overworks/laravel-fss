@@ -11,9 +11,12 @@ class LifespanTest extends TestCase
 {
     public function testInstance(): Lifespan
     {
-        /** @var Lifespan */
         $service = $this->app->make(Lifespan::class);
         $this->assertNotNull($service);
+
+        /** @var Lifespan */
+        $service = fss_lifespan();
+        $this->assertInstanceOf(Lifespan::class, $service);
 
         if ($service->isApiKeyEmpty()) {
             $this->markTestSkipped('API key did not exist.');
